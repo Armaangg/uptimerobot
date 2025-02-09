@@ -4,8 +4,8 @@ import { status } from "minecraft-server-util";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const MC_HOST = "free-in2.peaknodes.in";
-const MC_PORT = 19208;
+const MC_HOST = "survival.faltusmp.fun";
+const MC_PORT = 25599;
 
 let serverOnline = false;
 
