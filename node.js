@@ -4,12 +4,12 @@ import { status } from "minecraft-server-util";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Your Minecraft server details
 const MC_HOST = "free-in2.peaknodes.in";
 const MC_PORT = 19208;
 
 let serverOnline = false;
 
+// Function to check Minecraft server status
 async function checkServer() {
     try {
         await status(MC_HOST, MC_PORT);
@@ -17,20 +17,23 @@ async function checkServer() {
         console.log("✅ Minecraft server is ONLINE");
     } catch (error) {
         serverOnline = false;
-        console.log("❌ Minecraft server is OFFLINE. Shutting down...");
-        process.exit(1); // Stop the app when MC server is offline
+        console.log("❌ Minecraft server is OFFLINE. Retrying...");
     }
 }
 
-// Check server every 1 second
+// Check Minecraft server every 1 second
 setInterval(checkServer, 1000);
 
-// Express route (Only works when the app is running)
+// Express route for Uptime Robot
 app.get("/", (req, res) => {
-    res.status(200).send("<h1>Minecraft Server is Online</h1>");
+    if (serverOnline) {
+        res.status(200).send("<h1>Minecraft Server is Online</h1>");
+    } else {
+        res.status(503).send("<h1>Site is Off (Minecraft Server is Offline)</h1>");
+    }
 });
 
-// Start the web server
+// Start Express server
 app.listen(PORT, "0.0.0.0", () => {
     console.log(`🌐 Web server running on port ${PORT}`);
 });
